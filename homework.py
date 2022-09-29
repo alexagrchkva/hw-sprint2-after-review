@@ -1,23 +1,14 @@
 from dataclasses import dataclass
-from typing import Dict, Type
+from typing import Type
 
 SWIMMING: str = 'SWM'
 RUNNING: str = 'RUN'
 SPORTSWALKING: str = 'WLK'
 
-SUPPORTED_FORMATS = [SWIMMING, RUNNING, SPORTSWALKING]
-
 
 @dataclass
 class InfoMessage:
     """Информационное сообщение о тренировке.
-
-    Attributes:
-        training_type: Тип тренировки
-        duration: Длительность
-        distance: Дистанция
-        speed: Ср. скорость
-        calories: Потрачено ккал
     """
     training_type: str
     duration: float
@@ -27,18 +18,17 @@ class InfoMessage:
 
     def get_message(self) -> str:
         """
-        Returns:
-            Тип тренировки,
-            Длительность,
-            Дистанция,
-            Ср. скорость,
-            Потрачено ккал.
+        Возвращает сообщение с информацией о тренировке:
+        тип, длительность, дистанция, средняя скорость,
+        количество потраченных килокалорий
         """
-        return (f'Тип тренировки: {self.training_type}; '
-                f'Длительность: {self.duration:.3f} ч.; '
-                f'Дистанция: {self.distance:.3f} км; '
-                f'Ср. скорость: {self.speed:.3f} км/ч; '
-                f'Потрачено ккал: {self.calories:.3f}.')
+        return (
+            f'Тип тренировки: {self.training_type}; '
+            f'Длительность: {self.duration:.3f} ч.; '
+            f'Дистанция: {self.distance:.3f} км; '
+            f'Ср. скорость: {self.speed:.3f} км/ч; '
+            f'Потрачено ккал: {self.calories:.3f}.'
+        )
 
 
 class Training:
@@ -46,7 +36,12 @@ class Training:
     MIN_IN_HOUR: int = 60
     LEN_STEP: float = 0.65
 
-    def __init__(self, action: int, duration: float, weight: float, ) -> None:
+    def __init__(
+            self,
+            action: int,
+            duration: float,
+            weight: float
+    ) -> None:
         self.action = action
         self.duration = duration
         self.weight = weight
@@ -61,7 +56,7 @@ class Training:
 
     def get_spent_calories(self) -> float:
         """Получить количество калорий"""
-        return NotImplemented
+        raise NotImplementedError
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о тренировке"""
@@ -70,7 +65,8 @@ class Training:
             self.duration,
             self.get_distance(),
             self.get_mean_speed(),
-            self.get_spent_calories())
+            self.get_spent_calories()
+        )
 
 
 class Running(Training):
@@ -81,9 +77,15 @@ class Running(Training):
 
     def get_spent_calories(self) -> float:
         calories_for_running = (
-            (self.RUN_CAL_1 * self.get_mean_speed()
-             - self.RUN_CAL_2) * self.weight
-            / self.M_IN_KM * (self.duration * Training.MIN_IN_HOUR))
+                    (
+                      self.RUN_CAL_1 * self.get_mean_speed()
+                      - self.RUN_CAL_2
+                    ) * self.weight
+                    / self.M_IN_KM
+                      * (
+                          self.duration * Training.MIN_IN_HOUR
+                        )
+        )
         return calories_for_running
 
 
@@ -92,7 +94,8 @@ class SportsWalking(Training):
     WKL_CAL_1: float = 0.035
     WKL_CAL_2: float = 0.029
 
-    def __init__(self,
+    def __init__(
+                 self,
                  action: int,
                  duration: float,
                  weight: float,
@@ -105,10 +108,14 @@ class SportsWalking(Training):
         return (
             (self.WKL_CAL_1 * self.weight
                 + (self.get_mean_speed()
-                    ** 2 // self.height
-                   )
-                * self.WKL_CAL_2 * self.weight)
-            * (self.duration * Training.MIN_IN_HOUR))
+                   ** 2 // self.height)
+                * self.WKL_CAL_2
+                * self.weight
+             )
+            * self.duration
+            * Training.MIN_IN_HOUR
+
+        )
 
 
 class Swimming(Training):
@@ -116,32 +123,38 @@ class Swimming(Training):
     SWM_CAL: float = 1.1
     LEN_STEP: float = 1.38
 
-    def __init__(self,
-                 action: int,
-                 duration: float,
-                 weight: float,
-                 length_pool: int,
-                 count_pool: int
-                 ) -> None:
+    def __init__(
+                 self,
+                 action:int,
+                 duration:float,
+                 weight:float,
+                 length_pool:int,
+                 count_pool:int
+    ) -> None:
         super().__init__(action, duration, weight)
         self.length_pool = length_pool
         self.count_pool = count_pool
 
     def get_mean_speed(self) -> float:
-        return (self.length_pool
+        return (
+                self.length_pool
                 * self.count_pool
                 / self.M_IN_KM
-                / self.duration)
+                / self.duration
+        )
 
     def get_spent_calories(self) -> float:
-        return ((self.get_mean_speed()
-                 + self.SWM_CAL) * 2 * self.weight)
+        return (
+            (
+              self.get_mean_speed() + self.SWM_CAL
+            ) * 2 * self.weight
+        )
 
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные с датчиков"""
 
-    workout_dict: Dict[str, Type[Training]] = {
+    workout_dict:[str, Type[Training]] = {
         SWIMMING: Swimming,
         RUNNING: Running,
         SPORTSWALKING: SportsWalking
@@ -149,7 +162,12 @@ def read_package(workout_type: str, data: list) -> Training:
 
     cls_name = workout_dict[workout_type]
     training = cls_name(*data)
-    return training
+
+    if workout_type in workout_dict.keys():
+        return training
+    else:
+        print("Тренировка не поддерживается "
+              "// Unsupported training type")
 
 
 def main(training: Training) -> None:
@@ -165,9 +183,5 @@ if __name__ == '__main__':
                 (SPORTSWALKING, [9000, 1, 75, 180])
                 ]
     for workout_type, data in packages:
-        if workout_type in SUPPORTED_FORMATS:
-            training = read_package(workout_type, data)
-            main(training)
-        else:
-            print("Тренировка не поддерживается "
-                  "// Unsupported training type")
+        training = read_package(workout_type, data)
+        main(training)
