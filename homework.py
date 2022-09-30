@@ -83,8 +83,8 @@ class Running(Training):
             ) * self.weight
             / self.M_IN_KM
             * (
-                  self.duration * Training.MIN_IN_HOUR
-              )
+                self.duration * Training.MIN_IN_HOUR
+            )
         )
         return calories_for_running
 
