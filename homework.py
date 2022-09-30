@@ -148,8 +148,7 @@ class Swimming(Training):
             (
                 self.get_mean_speed()
                 + self.SWM_CAL
-            ) *
-            2 * self.weight
+            ) * 2 * self.weight
         )
 
 
