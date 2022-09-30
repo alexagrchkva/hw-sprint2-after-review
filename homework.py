@@ -77,7 +77,7 @@ class Running(Training):
 
     def get_spent_calories(self) -> float:
         calories_for_running = (
-                          (
+                         (
                             self.RUN_CAL_1 * self.get_mean_speed()
                             - self.RUN_CAL_2
                           ) * self.weight
@@ -95,12 +95,12 @@ class SportsWalking(Training):
     WKL_CAL_2: float = 0.029
 
     def __init__(
-                 self,
-                 action: int,
-                 duration: float,
-                 weight: float,
-                 height: float
-                 ) -> None:
+            self,
+            action: int,
+            duration: float,
+            weight: float,
+            height: float
+    ) -> None:
         super().__init__(action, duration, weight)
         self.height = height
 
@@ -124,12 +124,12 @@ class Swimming(Training):
     LEN_STEP: float = 1.38
 
     def __init__(
-                 self,
-                 action: int,
-                 duration: float,
-                 weight: float,
-                 length_pool: int,
-                 count_pool: int
+            self,
+            action: int,
+            duration: float,
+            weight: float,
+            length_pool: int,
+            count_pool: int
     ) -> None:
         super().__init__(action, duration, weight)
         self.length_pool = length_pool
