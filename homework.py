@@ -125,11 +125,11 @@ class Swimming(Training):
 
     def __init__(
                  self,
-                 action:int,
-                 duration:float,
-                 weight:float,
-                 length_pool:int,
-                 count_pool:int
+                 action: int,
+                 duration: float,
+                 weight: float,
+                 length_pool: int,
+                 count_pool: int
     ) -> None:
         super().__init__(action, duration, weight)
         self.length_pool = length_pool
@@ -154,7 +154,7 @@ class Swimming(Training):
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные с датчиков"""
 
-    workout_dict:[str, Type[Training]] = {
+    workout_dict: [str, Type[Training]] = {
         SWIMMING: Swimming,
         RUNNING: Running,
         SPORTSWALKING: SportsWalking
