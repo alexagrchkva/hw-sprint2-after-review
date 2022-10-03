@@ -110,10 +110,10 @@ class SportsWalking(Training):
                 * self.weight
                 + (self.get_mean_speed()
                    ** 2 // self.height
-                  )
+                )
                 * self.WKL_CAL_2
                 * self.weight
-                )
+            )
             * self.duration
             * Training.MIN_IN_HOUR
 
@@ -154,7 +154,7 @@ class Swimming(Training):
         )
 
 
-def read_package(workout_type: str, data: list)-> Training:
+def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные с датчиков"""
     workout_dict: Dict[str, Type[Training]] = {
         SWIMMING: Swimming,
@@ -168,6 +168,7 @@ def read_package(workout_type: str, data: list)-> Training:
         return training
     else:
         raise ValueError
+
 
 def main(training: Training) -> None:
     """Основная функция"""
