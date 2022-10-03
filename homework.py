@@ -110,7 +110,7 @@ class SportsWalking(Training):
                 * self.weight
                 + (self.get_mean_speed()
                    ** 2 // self.height
-                )
+                   )
                 * self.WKL_CAL_2
                 * self.weight
             )
