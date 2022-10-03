@@ -188,4 +188,4 @@ if __name__ == '__main__':
             main(training)
         except ValueError:
             print("Тренировка не поддерживается "
-            "// Unsupported training type")
+                  "// Unsupported training type")
