@@ -126,12 +126,12 @@ class Swimming(Training):
     LEN_STEP: float = 1.38
 
     def __init__(
-            self,
-            action: int,
-            duration: float,
-            weight: float,
-            length_pool: int,
-            count_pool: int
+        self,
+        action: int,
+        duration: float,
+        weight: float,
+        length_pool: int,
+        count_pool: int
     ) -> None:
         super().__init__(action, duration, weight)
         self.length_pool = length_pool
@@ -162,12 +162,11 @@ def read_package(workout_type: str, data: list) -> Training:
         SPORTSWALKING: SportsWalking
     }
 
-    if workout_type in workout_dict.keys():
+    if workout_type in workout_dict:
         cls_name = workout_dict[workout_type]
         training = cls_name(*data)
         return training
-    else:
-        raise ValueError
+    raise ValueError(f"неподдерживаемая тренировка {workout_type}")
 
 
 def main(training: Training) -> None:
@@ -179,7 +178,7 @@ def main(training: Training) -> None:
 
 if __name__ == '__main__':
     packages = [
-        (SWIMMING, [720, 1, 80, 25, 40]),
+        ('SKI', [720, 1, 80, 25, 40]),
         (RUNNING, [1206, 12, 6]),
         (SPORTSWALKING, [9000, 1, 75, 180]),
     ]
